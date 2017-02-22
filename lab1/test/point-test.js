@@ -1,7 +1,7 @@
 // jshint esversion: 6
 const assert = require('chai').assert;
-const Point = require('../src/isInside.js').Point;
-const insidePolygon = require('../src/isInside.js').isPointInsidePolygon;
+const Point = require('../src/is-inside.js').Point;
+const insidePolygon = require('../src/is-inside.js').isPointInsidePolygon;
 
 describe('instance of Point class', () => {
   const p = new Point(1, 1);
@@ -29,6 +29,7 @@ describe('instance of Point class', () => {
 
 describe('main algorithm', () => {
   it('should tell if point is inside or outside of polygon', () => {
+    // przypadek testowy podany na zajeciach przez prowadzacego
     let polygon = [
       [0, 0], [0, 6], [20, 6], [20, 2], [22, 4], [22, 2], [24, 2], [24, 4],
       [26, 4], [26, 0], [20, 0], [18, 2], [18, 0], [16, 2], [16, 0], [14, 0],
