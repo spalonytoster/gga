@@ -1,6 +1,20 @@
 // jshint esversion: 6
 const det = require('robust-determinant-3');
 
+function toPoints(array) {
+  for (let i = 0; i < array.length; i++) {
+    array[i] = new Point(array[i][0], array[i][1]);
+  }
+}
+
+function createMatrix(p, q, r) {
+  return [
+    [p.x,    p.y,    1],
+    [q.x,    q.y,    1],
+    [r.x,    r.y,    1]
+  ];
+}
+
 class Point {
   constructor(x, y) {
     this.x = x;
@@ -8,21 +22,17 @@ class Point {
   }
 
   isUpwardOf(p, q) {
-    let determinant = det([
-      [p.x,    p.y,    1],
-      [q.x,    q.y,    1],
-      [this.x, this.y, 1]
-    ]);
-    if (Math.sign(det) > 0) {
+    let determinant = det(createMatrix(p, q, this));
+    if (Math.sign(determinant) > 0) {
       return true;
     }
     return false;
   }
 
   isDownwardOf(p, q) {
-    let determinant1 = det(p, q, r);
-    let determinant2 = det(q, p, r);
-    if (Math.sign(det) < 0 && determinant2 > 0) {
+    let determinant1 = det(createMatrix(p, q, this));
+    let determinant2 = det(createMatrix(q, p, this));
+    if (Math.sign(determinant1) < 0 && determinant2 > 0) {
       return true;
     }
     return false;
@@ -30,13 +40,9 @@ class Point {
 }
 
 function isPointInsidePolygon(coords, verges) {
-  point = {
-    x: coords[0],
-    y: coords[1]
-  };
-
+  verges = toPoints(verges);
+  let point = new Point(coords[0], coords[1]);
   let crosses = 0;
-  let isInside = false;
 
   verges.forEach((verge, i) => {
     if (crossesUpwards(verge)) {
@@ -44,7 +50,7 @@ function isPointInsidePolygon(coords, verges) {
     }
   });
 
-  return isInside;
+  return crosses % 2 === 1;
 }
 
 // kolejnosc musi byc zgodna z ruchem wskazowek zegara
@@ -71,7 +77,4 @@ function isPointInsidePolygon(coords, verges) {
 
 // http://www.cs.tufts.edu/comp/163/notes05/point_inclusion_handout.pdf
 
-module.exports = {
-  crossesUpwards: crossesUpwards,
-  crossesDownwards: crossesDownwards
-};
+module.exports = Point;
