@@ -1,29 +1,32 @@
 // jshint esversion: 6
-const robustDeterminant3 = require('robust-determinant-3');
+const det = require('robust-determinant-3');
 
-function det(p, q, r) {
-  return robustDeterminant3([
-    [p.x, p.y, 1],
-    [q.x, q.y, 1],
-    [r.x, r.y, 1]
-  ]);
-}
-
-function crossesUpwards(p, q, r) {
-  let determinant = det(p, q, r);
-  if (Math.sign(det) > 0) {
-    return true;
+class Point {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
   }
-  return false;
-}
 
-function crossesDownwards() {
-  let determinant1 = det(p, q, r);
-  let determinant2 = det(q, p, r);
-  if (Math.sign(det) < 0 && determinant2 > 0) {
-    return true;
+  isUpwardOf(p, q) {
+    let determinant = det([
+      [p.x,    p.y,    1],
+      [q.x,    q.y,    1],
+      [this.x, this.y, 1]
+    ]);
+    if (Math.sign(det) > 0) {
+      return true;
+    }
+    return false;
   }
-  return false;
+
+  isDownwardOf(p, q) {
+    let determinant1 = det(p, q, r);
+    let determinant2 = det(q, p, r);
+    if (Math.sign(det) < 0 && determinant2 > 0) {
+      return true;
+    }
+    return false;
+  }
 }
 
 function isPointInsidePolygon(coords, verges) {
