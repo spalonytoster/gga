@@ -6,7 +6,7 @@ function distance(p1, p2) {
 }
 
 function min(pairs) {
-  let closest;
+  let closest = [];
   closest.distance = Infinity;
   pairs.forEach((pair) => {
     let dist = distance(pair[0], pair[1]);
@@ -15,6 +15,7 @@ function min(pairs) {
       closest.distance = dist;
     }
   });
+  delete closest.distance;
   return closest;
 }
 
