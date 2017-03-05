@@ -3,24 +3,31 @@
 const utils = require('./utils-1d.js');
 const _ = require('lodash');
 
-function findTwoClosestPoints(inputPoints) {
-  let points = inputPoints.sort();
+function preprocess(array) {
+  return array.sort();
+}
 
-  let leftSide = inputPoints.slice(0, points.length / 2);
-  let rightSide = inputPoints.slice(points.length / 2);
+function recur(points) {
+  let leftSide = points.slice(0, points.length / 2);
+  let rightSide = points.slice(points.length / 2);
 
   let minPairLeft = [];
   if (leftSide.length > 1) {
-    minPairLeft = findTwoClosestPoints(leftSide);
+    minPairLeft = recur(leftSide);
   }
 
   let minPairRight = [];
   if (rightSide.length > 1) {
-    minPairRight = findTwoClosestPoints(rightSide);
+    minPairRight = recur(rightSide);
   }
   let centerPair = [_.last(leftSide), _.first(rightSide)];
 
   return utils.min([minPairLeft, minPairRight, centerPair]);
+}
+
+function findTwoClosestPoints(array) {
+  let points = preprocess(array);
+  return recur(points);
 }
 
 module.exports = { findTwoClosestPoints };
