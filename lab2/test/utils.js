@@ -27,4 +27,34 @@ describe('2D utils module', () => {
     ];
     expect(utils2D.min(arr)).to.be.deep.equal([[1, 2], [2, 1]]);
   });
+
+  it('should sort given set of points by x and y and return 2 sorted sets', () => {
+    let arr = [[1, 2], [3, 4], [1, 2], [2, 1], [4, 3], [6, 7], [9, 3]];
+    let result = utils2D.preprocess(arr);
+    expect(result.x).to.be.deep.equal([[1, 2], [1, 2], [2, 1], [3, 4], [4, 3], [6, 7], [9, 3]]);
+    expect(result.y).to.be.deep.equal([[2, 1], [1, 2], [1, 2], [4, 3], [9, 3], [3, 4], [6, 7]]);
+  });
+
+  it('should slice set of points into 2 parts', () => {
+    let arr = utils2D.preprocess([[1, 2], [3, 4], [1, 2], [2, 1], [4, 3], [6, 7], [9, 3]]);
+    let result = utils2D.slice(arr);
+    expect(result.left).to.be.deep.equal({
+      x: [[ 1, 2 ], [ 1, 2 ], [ 2, 1 ]],
+      y: [[ 2, 1 ], [ 1, 2 ], [ 1, 2 ]]
+    });
+    expect(result.right).to.be.deep.equal({
+      x: [[ 3, 4 ], [ 4, 3 ], [ 6, 7 ], [ 9, 3 ]],
+      y: [[ 4, 3 ], [ 9, 3 ], [ 3, 4 ], [ 6, 7 ]]
+    });
+  });
+
+  it('should filter set of points given range on x-axis', () => {
+    let arr = [[1, 2], [1, 2], [2, 1], [3, 4], [4, 3], [6, 7], [9, 3]];
+    let points = utils2D.preprocess(arr);
+    let result = utils2D.pointsWithinRange(points, 2.01, 8.9);
+    expect(result).to.be.deep.equal({
+      x: [[3, 4], [4, 3], [6, 7]],
+      y: [[4, 3], [3, 4], [6, 7]]
+    });
+  });
 });
