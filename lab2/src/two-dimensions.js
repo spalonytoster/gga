@@ -19,14 +19,18 @@ function recur(points) {
     minPairRight = recur(rightSide);
   }
 
+  console.log(minPairLeft, minPairRight);
   let deltaPair = utils.min(minPairLeft, minPairRight);
   let line = {};
-  line.x = (_.first(points.x)[0] + _.last(points.x)[0]) / 2;
+  line.x = _.first(points.x)[0];
 
   // punkty zawierajace sie w pasku delta R - red, B - blue
-  let R = utils.pointsWithinRange(points, line.x - deltaPair.distance, line.x);
-  let B = utils.pointsWithinRange(points, line.x + deltaPair.distance, line.x);
-  let centerPair = utils.closest(R, B);
+  // FIXME punkty ktore znajduja sie na prostej l, istnieja w obu zbiorach (R i B).
+  // zamienic filtrowanie na wyjmowanie z tablicy (pull zamiast filter)
+  // trzeba zaimplementowac wlasne..
+  let R = utils.pointsWithinRangeX(points.y, line.x - deltaPair.distance, line.x);
+  let B = utils.pointsWithinRangeX(points.y, line.x, line.x + deltaPair.distance);
+  let centerPair = utils.closest(R, B, deltaPair.distance);
 
   return utils.min(centerPair, deltaPair);
 }

@@ -1,5 +1,6 @@
 // jshint esversion: 6, node: true
 'use strict';
+const _ = require('lodash');
 
 function preprocess(array) {
   return {
@@ -14,10 +15,6 @@ function preprocess(array) {
 
 function distance(p1, p2) {
   return Math.sqrt(Math.pow(p1[0] - p2[0], 2) + Math.pow(p1[1] - p2[1], 2));
-}
-
-function distanceX(p1, p2) {
-  return Math.sqrt(Math.pow(p1 - p2, 2));
 }
 
 function min(pairs) {
@@ -50,30 +47,51 @@ function slice(points) {
   };
 }
 
-function pointsWithinRange(points, x1, x2) {
-  return {
-    x: points.x.filter((point) => {
-      return point[0] >= x1 && point[0] <= x2;
-    }),
-    y: points.y.filter((point) => {
-      return point[0] >= x1 && point[0] <= x2;
-    })
-  };
+function pointsWithinRangeX(points, from, to) {
+  return points.filter((point) => {
+    return point[0] >= from && point[0] <= to;
+  });
 }
 
-function closest(R, B) {
-  let closest = [[], []];
-  closest.distance = Infinity;
+function pointsWithinRangeY(points, from, to) {
+  return points.filter((point) => {
+    return point[1] >= from && point[1] <= to;
+  });
+}
 
-  return [];
+function closest(R, B, delta) {
+  // console.log(R, B);
+  R.closestPairs = [];
+  R.forEach((red) => {
+    let blues = pointsWithinRangeY(B, red[1], red[1] + delta);
+    console.log(blues.length);
+    let pairs = [];
+    blues.forEach((blue) => {
+      pairs.push([red, blue]);
+    });
+    R.closestPairs.push(min(pairs));
+  });
+
+  B.closestPairs = [];
+  B.forEach((blue) => {
+    let reds = pointsWithinRangeY(B, blue[1], blue[1] + delta);
+    console.log(reds.length);
+    let pairs = [];
+    reds.forEach((red) => {
+      pairs.push([blue, red]);
+    });
+    B.closestPairs.push(min(pairs));
+  });
+
+  return min(_.concat(R.closestPairs, B.closestPairs));
 }
 
 module.exports = {
   distance,
   min,
   slice,
-  distanceX,
-  pointsWithinRange,
+  pointsWithinRangeX,
+  pointsWithinRangeY,
   closest,
   preprocess
 };

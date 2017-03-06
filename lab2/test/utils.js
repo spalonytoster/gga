@@ -2,6 +2,7 @@
 const expect = require('chai').expect;
 const utils1D = require('../src/utils-1d.js');
 const utils2D = require('../src/utils-2d.js');
+const _ = require('lodash');
 
 describe('1D utils module', () => {
   it('should calculate distance between two points on x axis', () => {
@@ -51,10 +52,26 @@ describe('2D utils module', () => {
   it('should filter set of points given range on x-axis', () => {
     let arr = [[1, 2], [1, 2], [2, 1], [3, 4], [4, 3], [6, 7], [9, 3]];
     let points = utils2D.preprocess(arr);
-    let result = utils2D.pointsWithinRange(points, 2.01, 8.9);
-    expect(result).to.be.deep.equal({
-      x: [[3, 4], [4, 3], [6, 7]],
-      y: [[4, 3], [3, 4], [6, 7]]
-    });
+    let result = utils2D.pointsWithinRangeX(points.y, 2.01, 8.9);
+    expect(result).to.be.deep.equal([[4, 3], [3, 4], [6, 7]]);
+  });
+
+  it('should filter set of points given range on y-axis', () => {
+    let arr = [[2, 1], [1, 2], [1, 2], [4, 3], [9, 3], [3, 4], [6, 7]];
+    let points = utils2D.preprocess(arr);
+    let result = utils2D.pointsWithinRangeY(points.y, 2.5, 4.3);
+    expect(result).to.be.deep.equal([[4, 3], [9, 3], [3, 4]]);
+  });
+
+  it('should find closest pair of points which distance between is less than delta in delta plane', () => {
+    // let arr = [[1, 2], [3, 4], [1, 2], [2, 1], [4, 3], [6, 7], [9, 3]];
+    // let points = utils2D.preprocess(arr);
+    // let line = {};
+    // line.x = (_.first(points.x)[0] + _.last(points.x)[0]) / 2;
+    //
+    // let R = utils.pointsWithinRangeX(points.y, line.x - deltaPair.distance, line.x);
+    // let B = utils.pointsWithinRangeX(points.y, line.x, line.x + deltaPair.distance);
+    // let centerPair = utils.closest(R, B, deltaPair.distance);
+    // TODO
   });
 });
