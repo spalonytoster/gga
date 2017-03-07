@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "test": "mocha test",
-    "mocha": "mocha"
+    "mocha": "mocha --debug-brk"
   },
   "keywords": [],
   "author": "",

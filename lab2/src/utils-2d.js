@@ -18,27 +18,41 @@ function distance(p1, p2) {
 }
 
 function min(pairs) {
+  if (pairs.length === 1) {
+    let pair = pairs[0];
+    pair.distance = distance(pair[0], pair[1]);
+    return pair;
+  }
   let closest = [];
   closest.distance = Infinity;
+  if (pairs.length < 1) {
+    return closest;
+  }
   pairs.forEach((pair) => {
+    // if (pair.length < 2) return;
     let dist = distance(pair[0], pair[1]);
     if (dist < closest.distance) {
       closest = pair;
       closest.distance = dist;
     }
   });
-  delete closest.distance;
   return closest;
 }
 
 function slice(points) {
+  let left = points.x.slice(0, points.x.length / 2);
   let leftSide = {
-    x: points.x.slice(0, points.x.length / 2),
-    y: points.y.slice(0, points.y.length / 2)
+    x: left,
+    y: left.slice().sort((a, b) => {
+      return a[1] - b[1];
+    })
   };
+  let right = points.x.slice(points.x.length / 2);
   let rightSide =  {
-    x: points.x.slice(points.x.length / 2),
-    y: points.y.slice(points.y.length / 2)
+    x: right,
+    y: right.slice().sort((a, b) => {
+      return a[1] - b[1];
+    })
   };
 
   return {
@@ -64,23 +78,27 @@ function closest(R, B, delta) {
   R.closestPairs = [];
   R.forEach((red) => {
     let blues = pointsWithinRangeY(B, red[1], red[1] + delta);
-    console.log(blues.length);
+    // console.log(blues.length);
     let pairs = [];
     blues.forEach((blue) => {
       pairs.push([red, blue]);
     });
-    R.closestPairs.push(min(pairs));
+    if (pairs.length > 0) {
+      R.closestPairs.push(min(pairs));
+    }
   });
 
   B.closestPairs = [];
   B.forEach((blue) => {
-    let reds = pointsWithinRangeY(B, blue[1], blue[1] + delta);
-    console.log(reds.length);
+    let reds = pointsWithinRangeY(R, blue[1], blue[1] + delta);
+    // console.log(reds.length);
     let pairs = [];
     reds.forEach((red) => {
       pairs.push([blue, red]);
     });
-    B.closestPairs.push(min(pairs));
+    if (pairs.length > 0) {
+      B.closestPairs.push(min(pairs));
+    }
   });
 
   return min(_.concat(R.closestPairs, B.closestPairs));

@@ -1,24 +1,18 @@
-// jshint esversion: 6
+// jshint esversion: 6, node: true, strict: true
+/* globals describe, context, it */
+'use strict';
 const expect = require('chai').expect;
 const app = require('../src/two-dimensions.js');
 
-let points = [
-  [2, 1],
-  [8, 3],
-  [5, 8],
-  [9, 1],
-  [5, 2],
-  [3, 3],
-  [4, 5],
-  [6, 5],
-  [1, 9],
-  [2, 1.5],
+const arr = [
+  [6, 7], [4, 7], [5, 3], [4, 3], [1, 1], [3, 1],
+  [9, 7], [9, 3], [8, 5], [9, 1], [7, 1], [2, 5]
 ];
 
 describe('Closest pair of points problem algorithm (planar case)', () => {
-  context('Given array of example inputs: ' + points.join(' '), () => {
-    it('should return [2, 1] and [2, 1.5]', () => {
-      expect(app.findTwoClosestPoints(points)).to.be.deep.equal([[2,1], [2, 1.5]]);
+  context('Given array of example inputs: ' + arr.join(' '), () => {
+    it('should return [[4, 3], [5, 3]]', () => {
+      expect(app.findTwoClosestPoints(arr)).to.be.deep.equal([[4, 3], [5, 3]]);
     });
   });
 });
