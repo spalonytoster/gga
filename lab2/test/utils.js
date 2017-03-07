@@ -69,7 +69,7 @@ describe('2D utils module', () => {
     expect(result).to.be.deep.equal([[5, 3], [4, 3], [9, 3], [2, 5], [8, 5]]);
   });
 
-  it('should find closest pair of points which distance between is less than delta in delta plane', () => {
+  // it('should find closest pair of points which distance between is less than delta in delta plane', () => {
     // let points = utils2D.preprocess(arr);
     // let line = {};
     // line.x = _.last(points.x)[0];
@@ -77,5 +77,5 @@ describe('2D utils module', () => {
     // let R = utils.pointsWithinRangeX(leftSide.y, line.x - deltaPair.distance, line.x);
     // let B = utils.pointsWithinRangeX(rightSide.y, line.x, line.x + deltaPair.distance);
     // let centerPair = utils.closest(R, B, deltaPair.distance);
-  });
+  // });
 });

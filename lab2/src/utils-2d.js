@@ -18,18 +18,21 @@ function distance(p1, p2) {
 }
 
 function min(pairs) {
+  let closest = [];
+  closest.distance = Infinity;
   if (pairs.length === 1) {
     let pair = pairs[0];
+    if (pair.length < 2) {
+      return closest;
+    }
     pair.distance = distance(pair[0], pair[1]);
     return pair;
   }
-  let closest = [];
-  closest.distance = Infinity;
   if (pairs.length < 1) {
     return closest;
   }
   pairs.forEach((pair) => {
-    // if (pair.length < 2) return;
+    if (pair.length < 2) return;
     let dist = distance(pair[0], pair[1]);
     if (dist < closest.distance) {
       closest = pair;
@@ -78,7 +81,6 @@ function closest(R, B, delta) {
   R.closestPairs = [];
   R.forEach((red) => {
     let blues = pointsWithinRangeY(B, red[1], red[1] + delta);
-    // console.log(blues.length);
     let pairs = [];
     blues.forEach((blue) => {
       pairs.push([red, blue]);
@@ -91,7 +93,6 @@ function closest(R, B, delta) {
   B.closestPairs = [];
   B.forEach((blue) => {
     let reds = pointsWithinRangeY(R, blue[1], blue[1] + delta);
-    // console.log(reds.length);
     let pairs = [];
     reds.forEach((red) => {
       pairs.push([blue, red]);
