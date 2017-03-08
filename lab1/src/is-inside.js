@@ -51,15 +51,12 @@ function intersection(ls1, ls2) {
   let r = ls2.start, s = ls2.end;
   return Math.sign(det(createMatrix(p, q, r))) !== Math.sign(det(createMatrix(p, q, s))) &&
     Math.sign(det(createMatrix(r, s, p))) !== Math.sign(det(createMatrix(r, s, q)));
-  // return ls1.start.isUpwardOf(ls2.start, ls2.end) && ls1.end.isUpwardOf(ls2.start, ls2.end) ||
-  //   ls1.start.isDownwardOf(ls2.start, ls2.end) && ls1.end.isDownwardOf(ls2.start, ls2.end);
 }
 
 function isPointInsidePolygon(coords, verges) {
   verges = toPoints(verges);
   let point = new Point(coords[0], coords[1]);
   let isInside = false;
-  let intersections = 0;
 
   // promień liczony od lewej
   let ray = {
@@ -75,14 +72,11 @@ function isPointInsidePolygon(coords, verges) {
 
     if (intersection(edge, ray) && (edge.start.y < ray.start.y ||
                                     edge.end.y < ray.start.y)) {
-      // isInside = !isInside;
-      intersections++;
+      isInside = !isInside;
     }
   }
 
-  // return isInside;
-  console.log(intersections);
-  return intersections % 2 === 1;
+  return isInside;
 }
 
 module.exports = {
