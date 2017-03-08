@@ -70,17 +70,29 @@ function pointsWithinRangeX(points, from, to) {
   });
 }
 
-function pointsWithinRangeY(points, from, to) {
-  return points.filter((point) => {
-    return point[1] >= from && point[1] <= to;
-  });
+function pointsWithinRangeY(points, start, from, to) {
+  let result = [];
+  for (let i = start; i < points.length; i++) {
+    let point = points[i];
+    if (point[1] >= from && point[1] <= to) {
+      result.push(point);
+    }
+    else {
+      result.lastIndex = i;
+    }
+    if (point[1] > to) {
+      break;
+    }
+  }
+  return result;
 }
 
 function closest(R, B, delta) {
-  // console.log(R, B);
   R.closestPairs = [];
+  B.start = 0;
   R.forEach((red) => {
-    let blues = pointsWithinRangeY(B, red[1], red[1] + delta);
+    let blues = pointsWithinRangeY(B, B.start, red[1], red[1] + delta);
+    B.start = blues.lastIndex;
     let pairs = [];
     blues.forEach((blue) => {
       pairs.push([red, blue]);
@@ -91,8 +103,10 @@ function closest(R, B, delta) {
   });
 
   B.closestPairs = [];
+  R.start = 0;
   B.forEach((blue) => {
-    let reds = pointsWithinRangeY(R, blue[1], blue[1] + delta);
+    let reds = pointsWithinRangeY(R, R.start, blue[1], blue[1] + delta);
+    R.start = reds.lastIndex;
     let pairs = [];
     reds.forEach((red) => {
       pairs.push([blue, red]);

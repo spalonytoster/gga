@@ -63,11 +63,12 @@ describe('2D utils module', () => {
     expect(result).to.be.deep.equal([[5, 3], [6, 7], [7, 1], [8, 5]]);
   });
 
-  it('should filter set of points given range on y-axis', () => {
-    let points = utils2D.preprocess(arr);
-    let result = utils2D.pointsWithinRangeY(points.y, 2.5, 6);
-    expect(result).to.be.deep.equal([[5, 3], [4, 3], [9, 3], [2, 5], [8, 5]]);
-  });
+  // it('should filter set of points given range on y-axis', () => {
+  //   let points = utils2D.preprocess(arr);
+  //   let startIndex = 0;
+  //   let result = utils2D.pointsWithinRangeY(points.y, startIndex, 2.5, 4);
+  //   expect(result).to.be.deep.equal([[5, 3], [4, 3], [9, 3]]);
+  // });
 
   // it('should find closest pair of points which distance between is less than delta in delta plane', () => {
     // let points = utils2D.preprocess(arr);
