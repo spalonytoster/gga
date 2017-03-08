@@ -4,7 +4,8 @@
   "description": "",
   "main": "isInside.js",
   "scripts": {
-    "test": "mocha test"
+    "test": "mocha test",
+    "mocha": "mocha --debug-brk"
   },
   "keywords": [],
   "author": "",

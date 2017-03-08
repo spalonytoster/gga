@@ -1,4 +1,5 @@
-// jshint esversion: 6
+// jshint esversion: 6, node: true
+'use strict';
 const det = require('robust-determinant-3');
 
 function toPoints(array) {
@@ -41,14 +42,17 @@ class Point {
   }
 }
 
+function o(p, q, r) {
+  return Math.sign(det(createMatrix(p, q, r)));
+}
+
 function intersection(ls1, ls2) {
-  // let p = ls1.start, q = ls1.end;
-  // let r = ls2.start, s = ls2.end;
-  // return Math.sign(det(createMatrix(p, q, r))) !== Math.sign(det(createMatrix(p, q, s))) &&
-  //   Math.sign(det(createMatrix(r, s, p))) !== Math.sign(det(createMatrix(r, s, q)));
-  return ls1.start.isUpwardOf(ls2.start, ls2.end) && ls1.end.isUpwardOf(ls2.start, ls2.end) ||
-    ls1.start.isDownwardOf(ls2.start, ls2.end) && ls1.end.isDownwardOf(ls2.start, ls2.end);
-  return
+  let p = ls1.start, q = ls1.end;
+  let r = ls2.start, s = ls2.end;
+  return Math.sign(det(createMatrix(p, q, r))) !== Math.sign(det(createMatrix(p, q, s))) &&
+    Math.sign(det(createMatrix(r, s, p))) !== Math.sign(det(createMatrix(r, s, q)));
+  // return ls1.start.isUpwardOf(ls2.start, ls2.end) && ls1.end.isUpwardOf(ls2.start, ls2.end) ||
+  //   ls1.start.isDownwardOf(ls2.start, ls2.end) && ls1.end.isDownwardOf(ls2.start, ls2.end);
 }
 
 function isPointInsidePolygon(coords, verges) {
@@ -69,8 +73,8 @@ function isPointInsidePolygon(coords, verges) {
       end: verges[(i+1) % verges.length]
     };
 
-    if (intersection(edge, ray) && (edge.start[1] < ray.start[1] ||
-                                    edge.end[1] < ray.start[1])) {
+    if (intersection(edge, ray) && (edge.start.y < ray.start.y ||
+                                    edge.end.y < ray.start.y)) {
       // isInside = !isInside;
       intersections++;
     }
@@ -83,5 +87,6 @@ function isPointInsidePolygon(coords, verges) {
 
 module.exports = {
   Point,
-  isPointInsidePolygon
+  isPointInsidePolygon,
+  intersection
 };
