@@ -18,10 +18,6 @@ function pointsWithinSubtree(subtree) {
 }
 
 function areaOfSubtree(subtree) {
-  // if (typeof subtree.value === 'undefined') {
-  //   return undefined;
-  // }
-
   let points = pointsWithinSubtree(subtree);
   let result = {
     x: {
@@ -100,24 +96,27 @@ class KDTree {
 
 function recur(query, tree) {
   let result = [];
-  result.concat(visit(query, tree.left));
-  result.concat(recur(query, tree.left));
-
-  result.concat(visit(query, tree.right));
-  result.concat(recur(query, tree.right));
+  if (tree.left) {
+    result = result.concat(visit(query, tree.left));
+    result = result.concat(recur(query, tree.left));
+  }
+  if (tree.right) {
+    result = result.concat(visit(query, tree.right));
+    result = result.concat(recur(query, tree.right));
+  }
   return result;
 }
 
 function visit(query, tree) {
   let result = [];
-  if (intersects(query, tree.left.area)) {
-    // wchodzimy
-    if (includesArea(query, tree.left.area)) {
-      result = result.concat(pointsWithinSubtree(tree.left));
+  if (intersects(query, tree.area)) {
+    // plaszczyzny sie tna -wchodzimy
+    if (includesArea(query, tree.area)) {
+      result = result.concat(pointsWithinSubtree(tree));
     }
-    else if (typeof tree.left.value !== 'undefined') {
-      if (includesPoint(query, tree.left.value)) {
-        result.push(tree.left.value);
+    else if (typeof tree.value !== 'undefined') {
+      if (includesPoint(query, tree.value)) {
+        result.push(tree.value);
       }
     }
   }
@@ -125,8 +124,8 @@ function visit(query, tree) {
 }
 
 function intersects(A, B) {
-  return A.x.min < B.x.max && A.x.max > B.x.min &&
-    A.y.min < B.y.max && A.y.max > B.y.min;
+  return A.x.min <= B.x.max && A.x.max >= B.x.min &&
+    A.y.min <= B.y.max && A.y.max >= B.y.min;
 }
 
 function includesArea(A, B) {
