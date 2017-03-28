@@ -6,14 +6,14 @@ const app = require('../src/app.js');
 
 let points = [
   [1, 3], // p1
-  [2, 8], // p4
   [3, 6], // p2
   [4, 1], // p3
+  [2, 8], // p4
   [5, 7], // p5
-  [6, 5], // p7
-  [7, 10], // p9
   [8, 2], // p6
+  [6, 5], // p7
   [9, 4], // p8
+  [7, 10], // p9
   [10, 9], // p10
 ];
 
@@ -21,53 +21,43 @@ describe('App', () => {
     it('Should create KD-tree from given array of points', () => {
       let result = new app.KDTree(points);
       // console.log(JSON.stringify(result, null, 2));
-      expect(result).to.be.deep.equal({ // l1
-        left: { // l2
-          left: {
-            left: {
-              left: {
-                value: [1, 3] // p1
-              },
-              right: {
-                value: [3, 6] // p2
-              }
-            },
-            right: {
-              value: [4, 1] // p3
-            }
-          },
-          right: {
-            left: {
-              value: [2, 8] // p4
-            },
-            right: {
-              value: [5, 7] // p5
-            }
-          }
+      expect(result).to.be.deep.equal(require('./tree-expected.js'));
+    });
+
+    it('Should return all elements in a subtree', () => {
+      let tree = new app.KDTree(points);
+      expect(app.pointsWithinSubtree(tree)).to.be.deep.equal(points);
+      expect(app.pointsWithinSubtree(tree.left.left.left)).to.be.deep.equal(points.slice(0, 2));
+      expect(app.pointsWithinSubtree(tree.left.left)).to.be.deep.equal(points.slice(0, 3));
+      expect(app.pointsWithinSubtree(tree.right.right)).to.be.deep.equal(points.slice(8, 10));
+    });
+
+    it('Should return area of given subtree', () => {
+      let tree = new app.KDTree(points);
+      expect(app.areaOfSubtree(tree)).to.be.deep.equal({
+        x: {
+          min: 1,
+          max: 10
         },
-        right: { // l3
-          left: { // l6
-            left: { // l9
-              left: {
-                value: [8, 2] // p6
-              },
-              right: {
-                value: [6, 5] // p7
-              }
-            },
-            right: {
-              value: [9, 4] // p8
-            }
-          },
-          right: { // l7
-            left: {
-              value: [7, 10]
-            },
-            right: {
-              value: [10, 9]
-            }
-          }
+        y: {
+          min: 1,
+          max: 10
         }
       });
+    });
+
+    it('Should return proper elements within query', () => {
+      let query = {
+        x: {
+          min: 4,
+          max: 7
+        },
+        y: {
+          min: 4,
+          max: 8
+        }
+      };
+      let tree = new app.KDTree(points);
+      expect(tree.search(query)).to.be.deep.equal([[5, 7], [6, 5]]);
     });
 });
