@@ -3,6 +3,7 @@
 'use strict';
 const expect = require('chai').expect;
 const app = require('../src/app.js');
+const _ = require('lodash');
 
 let points = [
   [1, 3], // p1
@@ -59,5 +60,15 @@ describe('App', () => {
       };
       let tree = new app.KDTree(points);
       expect(tree.search(query)).to.be.deep.equal([[5, 7], [6, 5]]);
+    });
+
+    it('Should properly result given points from lab', () => {
+      let tree = new app.KDTree(require('./test-points-lab.js'));
+      let queries = require('./test-queries-lab.js');
+      queries.forEach((query) => {
+        console.log(tree.search(query));
+        // console.log(JSON.stringify(tree.search(query), null, 2));
+        console.log();
+      });
     });
 });
