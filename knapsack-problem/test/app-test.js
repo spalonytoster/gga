@@ -17,12 +17,12 @@ describe('Knapsack problem solution', () => {
       { size: 6, value: 5 },
       { size: 4, value: 4 }
     ];
-    let result = app.getOptimalItemList(items, size);
+    let result1 = app.greatestKnapsackValue(items, size);
+    let result2 = app.smallestKnapsackValue(items, size);
 
-    expect(result.length).to.be.equal(expected.length);
-
+    expect(result1.length).to.be.equal(expected.length);
     expected.forEach((item) => {
-      expect(result).to.include(item);
+      expect(result1).to.include(item);
     });
   });
 });
