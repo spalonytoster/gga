@@ -15,12 +15,16 @@ function detectMaxima(points) {
     let point = points[i];
     let y = point[1];
     if (y > max) {
-      results.push(point);
-      max = y;
+      if (isPointVerticallyBetweenOthers(points, i)) {
+        results.push(point);
+        max = y;
+      }
     }
     if (y < min) {
-      results.push(point);
-      min = y;
+      if (isPointVerticallyBetweenOthers(points, i)) {
+        results.push(point);
+        min = y;
+      }
     }
   }
 
@@ -32,16 +36,27 @@ function detectMaxima(points) {
     let point = points[i];
     let y = point[1];
     if (y > max) {
-      results.push(point);
-      max = y;
+      if (isPointVerticallyBetweenOthers(points, i)) {
+        results.push(point);
+        max = y;
+      }
     }
     if (y < min) {
-      results.push(point);
-      min = y;
+      if (isPointVerticallyBetweenOthers(points, i)) {
+        results.push(point);
+        min = y;
+      }
     }
   }
 
   return _.uniq(results);
+}
+
+function isPointVerticallyBetweenOthers(points, i) {
+  let point = points[i];
+  let previous = points[i-1];
+  let next = points[i+1];
+  return (previous && !point[0] === previous[0]) || (next && !point[0] === next[0]);
 }
 
 module.exports = { detectMaxima };

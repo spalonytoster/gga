@@ -15,10 +15,7 @@ function greatestKnapsackValue(items, size) {
     }
   });
 
-  console.log(W);
-  console.log('solution: ', W[items.length-1][size]);
-
-  return [];
+  return W[items.length-1][size];
 }
 
 function calculateW(item, W, i, s) {
@@ -60,16 +57,12 @@ function smallestKnapsackValue(items, size) {
 
   let max = 0;
   for (let v = 0; v <= summedValues; v++) {
-    console.log(A[items.length-1][v] <= size);
     if (A[items.length-1][v] <= size) {
       max = v;
     }
   }
 
-  console.log(A);
-  console.log('solution: ', A[items.length-1][max]);
-
-  return [];
+  return A[items.length-1][max];
 }
 
 function calculateA(item, A, i, v) {
