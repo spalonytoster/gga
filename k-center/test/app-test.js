@@ -7,11 +7,11 @@ const app = require('../src/app.js');
 const points = require('./points.json');
 
 describe('k-center function', () => {
-  context('given k = 2', () => {
-    let k = 3;
+  context('given k = 4', () => {
+    let k = 5;
 
     it('Should return 2 valid centers', () => {
-      let expected = [[1, 1], [3, 3]];
+      let expected = [[1, 1], [3, 3], [1, 3], [3, 1], [2, 2]];
       let result = app.kcenter(points, k);
       console.log('result:', result);
 

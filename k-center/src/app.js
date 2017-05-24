@@ -5,20 +5,20 @@ function distance(p1, p2) {
   return Math.sqrt(Math.pow(p1[0] - p2[0], 2) + Math.pow(p1[1] - p2[1], 2));
 }
 
-function furthestPoint(points, sj, distances) {
+function furthestPoint(points, S, distances) {
+  let last = _.last(S);
   let max = {
     distance: NaN,
     index: NaN
   };
 
-  // S.forEach((s) => {
   max = {
-    distance: _.first(distances),
-    index: 0
+    distance: -1,
+    index: -1
   };
 
-  for (let i = 1; i < points.length; i++) {
-    if (points[i] === sj) {
+  for (let i = 0; i < points.length; i++) {
+    if (_.isEqual(points[i], last)) {
       continue;
     }
     let dist = distances[i];
@@ -26,15 +26,20 @@ function furthestPoint(points, sj, distances) {
       max.distance = dist;
       max.index = i;
     }
-    let sjDist = distance(points[i], sj);
-    if (sjDist > dist) {
-      distances[i] = sjDist;
+  }
+
+  let newMax = points[max.index];
+  for (let i = 0; i < points.length; i++) {
+    if (_.isEqual(points[i], max)) {
+      continue;
+    }
+    let dist = distance(newMax, points[i]);
+    if (dist < distances[i]) {
+      distances[i] = dist;
     }
   }
-  // });
 
-  let result = points[max.index];
-  return result;
+  return newMax;
 }
 
 function calculateDistances(points, p) {
@@ -48,13 +53,11 @@ function calculateDistances(points, p) {
 function kcenter(points, k) {
   // let s1 = _.sample(points);
   let s1 = points[0];
-  // s1.index = 0;
-
   let S = [s1];
+  let distances = calculateDistances(points, s1);
 
   for (let j = 1; j < k; j++) {
-    let distances = calculateDistances(points, s1);
-    let sj = furthestPoint(points, _.last(S), distances);
+    let sj = furthestPoint(points, S, distances);
     S.push(sj);
   }
 
