@@ -13,7 +13,6 @@ describe('k-center function', () => {
     it('Should return 2 valid centers', () => {
       let expected = [[1, 1], [3, 3]];
       let result = app.kcenter(points, k);
-      console.log(result);
 
       expected.forEach((point) => assert.includeDeepMembers(result, [point]));
     });
